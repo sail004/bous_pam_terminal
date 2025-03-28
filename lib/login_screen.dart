@@ -1,6 +1,7 @@
-import 'package:bous_pam_terminal/Entities/Terminal.Dart';
+import 'package:bous_pam_terminal/Entities/Terminal.dart';
 import 'package:flutter/material.dart';
 import 'nfc_reader_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -11,15 +12,18 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _idController = TextEditingController();
   String _errorText = '';
 
-  void _onLoginPressed() {
+  Future<void> _onLoginPressed() async {
     String enteredId = _idController.text.trim();
     if (enteredId == '1') {
+      // Используем импортированную функцию setLoggedIn
+      await setLoggedIn(true); // Сохраняем статус авторизации
+
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => NfcReaderScreen()),
       );
       final terminal = Terminal();
-      terminal.setId(1);
+      terminal.setId(1);  
     } else {
       setState(() {
         _errorText = 'Неверный ID. Попробуйте еще раз.';
@@ -62,4 +66,13 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+  Future<void> setLoggedIn(bool isLoggedIn) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setBool('isLoggedIn', isLoggedIn);
+}
+
+Future<bool> isLoggedIn() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getBool('isLoggedIn') ?? false;
+}
 }

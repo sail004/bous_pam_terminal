@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 Future<Map<String, dynamic>> sendPayment({required int userId, required int balance_change, required int terminal}) async {
-  final url = Uri.parse('http://95.163.251.146/payment/${userId}'); // Замените на ваш URL
+  final url = Uri.parse('http://185.65.200.150/payment/${userId}');
   final body = {
     "balance_change": balance_change,
     "id_user": userId,
